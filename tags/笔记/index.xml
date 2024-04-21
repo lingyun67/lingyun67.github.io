@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>笔记 on black raison detre</title>
+    <link>http://localhost:1313/about/tags/%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 笔记 on black raison detre</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2024 Kumo67</copyright>
+    <lastBuildDate>Tue, 28 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/about/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>金旭亮C#编程课个人自学笔记</title>
+      <link>http://localhost:1313/about/posts/%E9%87%91%E6%97%AD%E4%BA%AEc%23%E7%BC%96%E7%A8%8B%E8%AF%BE%E4%B8%AA%E4%BA%BA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 28 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/about/posts/%E9%87%91%E6%97%AD%E4%BA%AEc%23%E7%BC%96%E7%A8%8B%E8%AF%BE%E4%B8%AA%E4%BA%BA%E8%87%AA%E5%AD%A6%E7%AC%94%E8%AE%B0/</guid>
+      <description>前言 # .</description>
+      
+    </item>
+    
+  </channel>
+</rss>
