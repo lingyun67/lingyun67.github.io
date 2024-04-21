@@ -2,11 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>My New Hugo Site</title>
-    <link>lingyun67.github.io/</link>
+    <link>https://lingyun67.github.io/</link>
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 21 Apr 2024 20:08:07 +0800</lastBuildDate>
-    <atom:link href="lingyun67.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://lingyun67.github.io/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
