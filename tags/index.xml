@@ -2,48 +2,48 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on black raison detre</title>
-    <link>https://lingyun67.github.io/tags/</link>
+    <link>https://lingyun67.github.io/about/tags/</link>
     <description>Recent content in Tags on black raison detre</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>© 2024 Kumo67</copyright>
-    <lastBuildDate>Mon, 19 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://lingyun67.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 15 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://lingyun67.github.io/about/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Unity</title>
-      <link>https://lingyun67.github.io/tags/unity/</link>
-      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <link>https://lingyun67.github.io/about/tags/unity/</link>
+      <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
       
-      <guid>https://lingyun67.github.io/tags/unity/</guid>
-      <description></description>
-      
-    </item>
-    
-    <item>
-      <title>编程</title>
-      <link>https://lingyun67.github.io/tags/%E7%BC%96%E7%A8%8B/</link>
-      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
-      
-      <guid>https://lingyun67.github.io/tags/%E7%BC%96%E7%A8%8B/</guid>
-      <description></description>
-      
-    </item>
-    
-    <item>
-      <title>Space</title>
-      <link>https://lingyun67.github.io/tags/space/</link>
-      <pubDate>Mon, 14 Aug 2023 00:00:00 +0000</pubDate>
-      
-      <guid>https://lingyun67.github.io/tags/space/</guid>
+      <guid>https://lingyun67.github.io/about/tags/unity/</guid>
       <description></description>
       
     </item>
     
     <item>
       <title>烤肉</title>
-      <link>https://lingyun67.github.io/tags/%E7%83%A4%E8%82%89/</link>
+      <link>https://lingyun67.github.io/about/tags/%E7%83%A4%E8%82%89/</link>
+      <pubDate>Mon, 15 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://lingyun67.github.io/about/tags/%E7%83%A4%E8%82%89/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>编程</title>
+      <link>https://lingyun67.github.io/about/tags/%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://lingyun67.github.io/about/tags/%E7%BC%96%E7%A8%8B/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>Space</title>
+      <link>https://lingyun67.github.io/about/tags/space/</link>
       <pubDate>Mon, 14 Aug 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://lingyun67.github.io/tags/%E7%83%A4%E8%82%89/</guid>
+      <guid>https://lingyun67.github.io/about/tags/space/</guid>
       <description></description>
       
     </item>
