@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Blowfish</title>
+    <title>Tags on black raison detre</title>
     <link>https://lingyun67.github.io/tags/</link>
-    <description>Recent content in Tags on Blowfish</description>
+    <description>Recent content in Tags on black raison detre</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <copyright>© 2024 雲</copyright>
-    <atom:link href="https://lingyun67.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>© 2024 Kumo67</copyright>
+    <lastBuildDate>Mon, 14 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://lingyun67.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Space</title>
+      <link>https://lingyun67.github.io/tags/space/</link>
+      <pubDate>Mon, 14 Aug 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://lingyun67.github.io/tags/space/</guid>
+      <description></description>
+      
+    </item>
+    
   </channel>
 </rss>

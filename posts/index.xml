@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>black raison detre</title>
-    <link>https://lingyun67.github.io/</link>
-    <description>Recent content on black raison detre</description>
+    <title>Posts on black raison detre</title>
+    <link>https://lingyun67.github.io/posts/</link>
+    <description>Recent content in Posts on black raison detre</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>© 2024 Kumo67</copyright>
-    <lastBuildDate>Mon, 22 Apr 2024 01:00:31 +0800</lastBuildDate><atom:link href="https://lingyun67.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 22 Apr 2024 01:00:31 +0800</lastBuildDate><atom:link href="https://lingyun67.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My first post</title>
       <link>https://lingyun67.github.io/posts/firsttest/</link>
