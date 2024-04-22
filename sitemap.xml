@@ -9,7 +9,19 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://lingyun67.github.io/posts/</loc>
+    <lastmod>2024-04-22T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://lingyun67.github.io/weekly/</loc>
+    <lastmod>2024-04-22T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://lingyun67.github.io/posts/2024%E5%B9%B44%E6%9C%8822%E6%97%A5%E5%91%A8%E6%8A%A5/</loc>
     <lastmod>2024-04-22T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
@@ -29,12 +41,6 @@
   <url>
     <loc>https://lingyun67.github.io/pages/</loc>
     <lastmod>2024-04-21T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://lingyun67.github.io/posts/</loc>
-    <lastmod>2024-04-15T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
