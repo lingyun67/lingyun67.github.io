@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="zh-cn" dir="ltr" class="scroll-smooth" data-default-appearance="dark"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>MC服务器与单机存档之间的数据迁移 &middot; black raison detre</title>
+  <meta name="title" content="MC服务器与单机存档之间的数据迁移 &middot; black raison detre" />
+  
+  
+  
+  
+  
+  <link rel="canonical" href="https://lingyun67.github.io/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.ac59a1b8eaafef739c129d12787ac29f6a420bcb348c7aeec8949a8d0b7d6c2023766c169d14b9031b751504eb3c976efe786fec135b340a49868acd8caa4127.css"
+    integrity="sha512-rFmhuOqv73OcEp0SeHrCn2pCC8s0jHruyJSajQt9bCAjdmwWnRS5Axt1FQTrPJdu/nhv7BNbNApJhorNjKpBJw==" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b36dda9ec4ec11e967fd341e7d57b8c484ac7a39f8f329f7bcf7ce4812569de8607db866a086d4789956ac0b74967e251c9a566d94d469dd28b8787fed4f46f5.js"
+    integrity="sha512-s23ansTsEeln/TQefVe4xISsejn48yn3vPfOSBJWnehgfbhmoIbUeJlWrAt0ln4lHJpWbZTUad0ouHh/7U9G9Q==" data-copy="" data-copied=""></script>
+  
+  
+  <script src="/js/zoom.min.js"></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://lingyun67.github.io/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/">
+  <meta property="og:site_name" content="black raison detre">
+  <meta property="og:title" content="MC服务器与单机存档之间的数据迁移">
+  <meta property="og:description" content="前言：本篇文章目标为将服务器低版本存档完美迁移到高版本单机存档，同理单机迁移服务器存档相反操作即可，但最好不要从高版本向低版本迁移。">
+  <meta property="og:locale" content="zh-cn">
+  <meta property="og:type" content="article">
+  <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-05-19T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-05-19T00:00:00+00:00">
+
+  <meta name="twitter:card" content="summary"><meta name="twitter:title" content="MC服务器与单机存档之间的数据迁移">
+<meta name="twitter:description" content="前言：本篇文章目标为将服务器低版本存档完美迁移到高版本单机存档，同理单机迁移服务器存档相反操作即可，但最好不要从高版本向低版本迁移。">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "MC服务器与单机存档之间的数据迁移",
+    "headline": "MC服务器与单机存档之间的数据迁移",
+    
+    "abstract": "前言：本篇文章目标为将服务器低版本存档完美迁移到高版本单机存档，同理单机迁移服务器存档相反操作即可，但最好不要从高版本向低版本迁移。",
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/lingyun67.github.io\/posts\/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB\/",
+    "author" : {
+      "@type": "Person",
+      "name": "Kumo67"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-05-19T00:00:00\u002b00:00",
+    "datePublished": "2023-05-19T00:00:00\u002b00:00",
+    
+    "dateModified": "2023-05-19T00:00:00\u002b00:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "389"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="Kumo67" />
+  
+  
+  
+  <link href="https://twitter.com/burufugu" rel="me" />
+  
+  
+  <link href="https://github.com/lingyun67" rel="me" />
+  
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.js" integrity=""></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start space-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">black raison detre</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center space-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/pages/about/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        关于我
+    </p>
+</a>
+
+
+            
+            
+  <a href=""  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        学习笔记
+    </p>
+</a>
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="">
+        随记
+    </p>
+</a>
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class="ltr:mr-14 rtl:ml-14 flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center space-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400" style="margin-right:5px">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 -mr-2 md:hidden">
+
+        <label id="menu-button" for="menu-controller" class="block">
+            <input type="checkbox" id="menu-controller" class="hidden" />
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li>
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/pages/about/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            关于我
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href=""  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            学习笔记
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="">
+            随记
+        </p>
+    </a>
+</li>
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      MC服务器与单机存档之间的数据迁移
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2023-05-19 00:00:00 &#43;0000 UTC">2023 May 19</time><span class="px-2 text-primary-500">&middot;</span><span>389 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">2 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</div>
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+    
+    
+      
+    
+    
+      
+        
+      
+      <img class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4" width="96" height="96"
+      alt="Kumo67" src="/img/huangdou_logo_hu192ca31849736c9ab17c4ffc751ffaf8_26542_192x192_fill_box_center_3.png" />
+    
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      Kumo67
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Don&rsquo;t cry over spilled milk.</div>
+    
+    <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://twitter.com/burufugu"
+          target="_blank"
+          aria-label="X-Twitter"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/></svg>
+  </span>
+
+</span></a
+        >
+      
+    
+      
+        <a
+          class="px-1 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/lingyun67"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          ><span class="inline-block align-text-bottom">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</span></a
+        >
+      
+    
+  </div>
+
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+    
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          <p>前言：本篇文章目标为将服务器低版本存档完美迁移到高版本单机存档，同理单机迁移服务器存档相反操作即可，但最好不要从高版本向低版本迁移。</p>
+<ul>
+<li>需求：将手中的服务器存档迁移为单人存档，要求保留正确的背包及末影箱的物品。</li>
+<li>第二需求：升级存档从1.12.2至1.19.4，删除合适的区块，使新版本地形得以生成</li>
+<li>所用工具：NbtStudio(数据编辑工具)、 MCA Selector(区块域块编辑工具)</li>
+</ul>
+
+
+<h2 class="relative group">迁移前的准备及了解 
+    <div id="%E8%BF%81%E7%A7%BB%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%8F%8A%E4%BA%86%E8%A7%A3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E8%BF%81%E7%A7%BB%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87%E5%8F%8A%E4%BA%86%E8%A7%A3" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>首先了解一下数据保存结构：</p>
+<p><em>本段内容参考:<a href="https://search.mcbbs.net/forum.php?mod=viewthread&amp;tid=1441279&amp;extra=page%3D1&amp;ordertype=1&amp;page=2"   target="_blank">
+    [Mcbbs] 玩家背包的数据在哪里</a> 和 <a href="https://minecraft.fandom.com/zh/wiki/Player.dat%E6%A0%BC%E5%BC%8F"   target="_blank">
+    [WiKi]了解player.dat格式</a></em></p>
+<p>很显然，Wiki告诉我们，一个世界（存档）中和玩家相关的数据储存在 <code>level.dat</code>（.dat 格式）这个文件里面，但<strong>仅限单人模式</strong>，多人游戏时（服务器）中各个玩家的数据是储存在 <strong>playerdata</strong>文件夹中的<code>&lt;uuid&gt;.dat</code> （不同的uuid对应不同的玩家）。
+<em>不过据我观察，即使是在单人模式，<code>/playerdata/&lt;uuid&gt;.dat</code>也会储存玩家自己的数据，并且这里的数据和<code>level.dat</code>中的<strong>Player</strong>（类型为复合标签）一致，但单人模式下仅修改<code>/playerdata/&lt;uuid&gt;.dat</code>而不修改<code>level.dat</code>不会影响玩家数据，因此得知单人模式以<code>level.dat</code>为主。</em></p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202239_hua67e82187a5924aa602e6c46522ae901_93558_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202239_hua67e82187a5924aa602e6c46522ae901_93558_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202239_hua67e82187a5924aa602e6c46522ae901_93558_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202239_hua67e82187a5924aa602e6c46522ae901_93558_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202239_hua67e82187a5924aa602e6c46522ae901_93558_660x0_resize_box_3.png"
+        alt="image-20230519194315709"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>因此我们只需要：</p>
+<ul>
+<li>找到服务器内名为&quot;Ling_Yun67&quot;的玩家数据</li>
+<li>将其的背包数据与末影箱数据复制</li>
+<li>将其粘贴到单人存档内</li>
+</ul>
+<p>但经过实测，1.12.2与1.19.4的数据保存格式不同，若直接进行数据修改，会导致物品bug(附魔失效，潜影盒物品丢失)</p>
+<p>因此展开来讲，结合我们的两项需求，我们具体需要：</p>
+<ul>
+<li>将服务器存档进行合适的修改，使其可以正常的在单人模式加载</li>
+<li>在1.12.2版本下找到目标数据，复制到1.12.2的单人存档数据内</li>
+<li>删除游玩区域附近不需要的区块</li>
+<li>在1.19.4版本直接打开，生成1.19.4新地形，并且自动升级.dat数据</li>
+</ul>
+
+
+<h2 class="relative group">将服务器存档结构修改以适配单人模式 
+    <div id="%E5%B0%86%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E6%A1%A3%E7%BB%93%E6%9E%84%E4%BF%AE%E6%94%B9%E4%BB%A5%E9%80%82%E9%85%8D%E5%8D%95%E4%BA%BA%E6%A8%A1%E5%BC%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%B0%86%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E6%A1%A3%E7%BB%93%E6%9E%84%E4%BF%AE%E6%94%B9%E4%BB%A5%E9%80%82%E9%85%8D%E5%8D%95%E4%BA%BA%E6%A8%A1%E5%BC%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>本步骤分两部分完成</p>
+
+
+<h3 class="relative group">存档结构了解 
+    <div id="%E5%AD%98%E6%A1%A3%E7%BB%93%E6%9E%84%E4%BA%86%E8%A7%A3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AD%98%E6%A1%A3%E7%BB%93%E6%9E%84%E4%BA%86%E8%A7%A3" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>本人希望迁移的存档为1.12.2版本bukkit服务端，存档结构如下：</p>
+<pre tabindex="0"><code>D:.
+├─world
+│  │  level.dat //单人模式下会加载的存档数据，服务器模式应该是op的数据？
+│  │  level.dat_old
+│  │  session.lock
+│  │  uid.dat
+│  │
+│  ├─advancements
+│  │      00c71676-1488-48bb-9881-ae863cd73b83.json
+│  │      00dcb825-d242-47b8-b156-9048f8eb5fe8.json
+│  │      ......所有玩家.json......
+│  │      ffa724e9-373f-4a1a-a483-ced7f251e640.json
+│  │      ffad1cef-e7f4-478e-a070-5cbb501aabfc.json
+│  │
+│  ├─data
+│  │  │  idcounts.dat
+│  │  │  Mansion.dat
+│  │  │  map_0.dat
+│  │  │  map_1.dat
+│  │  │  map_10.dat
+│  │  │  .......
+│  │  │
+│  │  ├─advancements
+│  │  └─functions
+│  ├─playerdata //玩家背包数据在这里
+│  │      00c1983f-80e4-4a88-b6f0-8632629aa9e5.dat
+│  │      00c71676-1488-48bb-9881-ae863cd73b83.dat
+│  │      ......所有玩家数据.dat......
+│  │      ffa724e9-373f-4a1a-a483-ced7f251e640.dat
+│  │      ffad1cef-e7f4-478e-a070-5cbb501aabfc.dat
+│  │
+│  ├─region //主世界所有方块数据
+│  │      r.-1.-1.mca
+│  │      r.-1.-10.mca
+│  │      ......所有域块数据......
+│  │      r.9.8.mca
+│  │      r.9.9.mca
+│  │
+│  └─stats
+│          00c1983f-80e4-4a88-b6f0-8632629aa9e5.json
+│          00c71676-1488-48bb-9881-ae863cd73b83.json
+│          ......这个大概也是所有玩家的数据......
+│          ffa724e9-373f-4a1a-a483-ced7f251e640.json
+│          ffad1cef-e7f4-478e-a070-5cbb501aabfc.json
+│
+├─world_nether
+│  │  level.dat
+│  │  level.dat_old
+│  │  session.lock
+│  │  uid.dat
+│  │
+│  ├─data
+│  │  │  Fortress.dat
+│  │  │  villages_nether.dat
+│  │  │
+│  │  └─functions
+│  ├─DIM-1
+│  │  └─region //地狱所有方块数据
+│  │      r.-1.-1.mca
+│  │      r.-1.-10.mca
+│  │      ......所有域块数据......
+│  │      r.9.8.mca
+│  │      r.9.9.mca
+│  │
+│  └─playerdata
+│      这里空的
+└─world_the_end
+    │  level.dat
+    │  level.dat_old
+    │  session.lock
+    │  uid.dat
+    │
+    ├─data
+    │  │  EndCity.dat
+    │  │  villages_end.dat
+    │  │
+    │  └─functions
+    ├─DIM1
+    │  └─region //末地所有方块数据
+    │      r.-1.-1.mca
+    │      r.-1.-10.mca
+    │      ......所有域块数据......
+    │      r.9.8.mca
+    │      r.9.9.mca
+    │
+    └─playerdata
+           这里也是空的
+</code></pre><p>在1.12.2模式新建一个世界，进入地狱和末地创建地图后，可以看到结构如下：</p>
+<pre tabindex="0"><code>C:.
+│  icon.png
+│  level.dat
+│  level.dat_old
+│  session.lock
+│
+├─advancements
+│      55d7fbc5-d038-413b-8446-d9e66ccfb206.json
+│
+├─data
+│  │  Fortress.dat
+│  │  Temple.dat
+│  │  Village.dat
+│  │  villages.dat
+│  │  villages_end.dat
+│  │  villages_nether.dat
+│  │
+│  ├─advancements
+│  └─functions
+├─DIM-1
+│  └─region
+│          r.-1.-1.mca
+│          r.-1.0.mca
+│          r.0.-1.mca
+│          r.0.0.mca
+│
+├─DIM1
+│  └─region
+│          r.-1.-1.mca
+│          r.-1.0.mca
+│          r.0.-1.mca
+│          r.0.0.mca
+│
+├─playerdata
+│      55d7fbc5-d038-413b-8446-d9e66ccfb206.dat
+│
+├─region
+│      r.-1.0.mca
+│      r.0.0.mca
+│
+└─stats
+        55d7fbc5-d038-413b-8446-d9e66ccfb206.json
+</code></pre>
+
+<h3 class="relative group">实操 
+    <div id="%E5%AE%9E%E6%93%8D" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AE%9E%E6%93%8D" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>打开单人存档，打开playerdata，里面会有一到两个文件，文件的名字是一样的，后缀不一样，大概长这样：<code>099261a8-503b-39d4-9616-f7782702095c.dat</code>，将<strong>文件名找个地方记下来</strong>。</p>
+<p>打开单人存档，将<strong>根目录</strong>的<code>level.dat</code>复制到一个你不会搞混的地方，比如桌面</p>
+<p>现在同时打开服务器存档的World文件夹，可以看到文件结构相当相似，为了保证准确我们将<strong>单人存档</strong>内的如下文件<strong>全部删除</strong>，直接将服务器的world文件夹内的所有文件复制到单人存档下</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202241_hu14e11c554e7eee1f77185a54806d4312_81195_330x0_resize_q75_box.jpg 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202241_hu14e11c554e7eee1f77185a54806d4312_81195_660x0_resize_q75_box.jpg 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202241_hu14e11c554e7eee1f77185a54806d4312_81195_1024x0_resize_q75_box.jpg 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202241_hu14e11c554e7eee1f77185a54806d4312_81195_1320x0_resize_q75_box.jpg 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202241_hu14e11c554e7eee1f77185a54806d4312_81195_660x0_resize_q75_box.jpg"
+        alt="world"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>现在打开单人存档的DIM1和DIM-1文件夹，删除里面的所有文件，将<strong>world_nether</strong>内，注意是<strong>內部</strong>的所有文件复制到<strong>DIM-1</strong>，将<strong>world_the_end</strong>内，注意是<strong>內部</strong>的所有文件复制到<strong>DIM1</strong>，其实就是<strong>改了个名字</strong>，从<strong>world_nether</strong>改到<strong>DIM-1</strong>，从<strong>world_the_end</strong>改到<strong>DIM1</strong>。</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202242_hu336ad717bbad04f893a7f5168a4c7f9d_76097_330x0_resize_q75_box.jpg 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202242_hu336ad717bbad04f893a7f5168a4c7f9d_76097_660x0_resize_q75_box.jpg 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202242_hu336ad717bbad04f893a7f5168a4c7f9d_76097_1024x0_resize_q75_box.jpg 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202242_hu336ad717bbad04f893a7f5168a4c7f9d_76097_1320x0_resize_q75_box.jpg 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202242_hu336ad717bbad04f893a7f5168a4c7f9d_76097_660x0_resize_q75_box.jpg"
+        alt="end"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>打开单人存档的<strong>DIM-1</strong>与<strong>DIM1</strong>，可以看到有这么一个文件夹，将其拿出来</p>
+<p>DIM-1代表地狱，DIM1是末地，两个文件夹<strong>都要操作</strong></p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202243_huc5d344f89c5ffc6eaf6696a251c56c6d_67500_330x0_resize_q75_box.jpg 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202243_huc5d344f89c5ffc6eaf6696a251c56c6d_67500_660x0_resize_q75_box.jpg 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202243_huc5d344f89c5ffc6eaf6696a251c56c6d_67500_1024x0_resize_q75_box.jpg 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202243_huc5d344f89c5ffc6eaf6696a251c56c6d_67500_1320x0_resize_q75_box.jpg 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202243_huc5d344f89c5ffc6eaf6696a251c56c6d_67500_660x0_resize_q75_box.jpg"
+        alt="region"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>至此服务器存档的三个世界数据已经迁移完毕。</p>
+
+
+<h2 class="relative group">找到目标玩家数据并迁移到单人模式 
+    <div id="%E6%89%BE%E5%88%B0%E7%9B%AE%E6%A0%87%E7%8E%A9%E5%AE%B6%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%BF%81%E7%A7%BB%E5%88%B0%E5%8D%95%E4%BA%BA%E6%A8%A1%E5%BC%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E6%89%BE%E5%88%B0%E7%9B%AE%E6%A0%87%E7%8E%A9%E5%AE%B6%E6%95%B0%E6%8D%AE%E5%B9%B6%E8%BF%81%E7%A7%BB%E5%88%B0%E5%8D%95%E4%BA%BA%E6%A8%A1%E5%BC%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>在bukkit服务端中，<code>根目录\world\playerdata</code>存放着玩家数据，玩家数据是一串不知道什么玩意的字符，这个字符并不是随机的，并且<strong>与是否打开了正版验证有关</strong>。</p>
+<p>举例：当我在启动器登录正版后进入一个新的游戏，为我生成的文件是：<code>55d7fbc5-d038-413b-8446-d9e66ccfb206.dat</code>，事实上，这就是我的正版UUID。</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202244_huea60626fd5b9425ed7763512fb29bfba_27958_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202244_huea60626fd5b9425ed7763512fb29bfba_27958_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202244_huea60626fd5b9425ed7763512fb29bfba_27958_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202244_huea60626fd5b9425ed7763512fb29bfba_27958_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202244_huea60626fd5b9425ed7763512fb29bfba_27958_660x0_resize_box_3.png"
+        alt="image-20230519211549572"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>刚刚提到过，无论是服务器还是单人模式，都会生成一个UUID.dat文件，在正版验证下若玩家改名，不会导致存档丢失，仅以UUID判断玩家。</p>
+<p>我之前在服务器使用的ID是Ling_Yun67，到现在改为Yun67后完全没有受到影响。</p>
+<ul>
+<li>当我用盗版模式使用ID：Ling_Yun67，生成的文件是：<code>82a86d15-1ee6-3b3d-9026-7306445dc40f.dat</code></li>
+<li>当我用盗版模式使用ID：Yun67，生成的文件是：<code>099261a8-503b-39d4-9616-f7782702095c.dat</code></li>
+<li>当我用固定的账号正版验证使用任意ID，生成的文件都是：<code>55d7fbc5-d038-413b-8446-d9e66ccfb206.dat</code></li>
+</ul>
+<p>因此如果想在服务器的存档里找到自己的数据，刚刚在单人存档新建的1.12.2的存档的时候生成的.dat文件的名字，也就是你记下的文件名去掉.dat的后缀就是你的uuid。</p>
+<p>然后直接在服务器存档\world\playerdata内搜索你的数据，将你的数据复制到一个不会被你搞混的地方，比如桌面。</p>
+<p><em>如果是正版验证，可以在<a href="namemc.com"  >
+    namemc.com</a>搜索自己现在的id，即可获得uuid。</em></p>
+<p>还记得在刚刚你还把一个<code>level.dat</code>文件也复制出来了么？完成上述两个大步骤，你现在应该已经拥有：</p>
+<ul>
+<li>在一个不会被干扰的文件夹拥有一个<code>level.dat</code>文件，这个文件来自1.12.2单人模式，刚创建，很新鲜。</li>
+<li>一个UUID.dat文件，里面保存着你想要迁移的数据。这个文件来自服务器存档。</li>
+</ul>
+<p>下载这个可以修改 .dat 格式的文件的编辑器（从1.7到1.20都可以）
+<a href="https://www.mcbbs.net/thread-1417770-1-1.html"   target="_blank">
+    [全版本]NBT Studio 汉化版 —— 更加现代化的 NBT 编辑工具</a></p>
+<p>现在同时选中这两个文件，直接拖进NBT编辑工具。</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202245_hudd605581db7591ceab4d6230f6593cd9_2793_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202245_hudd605581db7591ceab4d6230f6593cd9_2793_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202245_hudd605581db7591ceab4d6230f6593cd9_2793_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202245_hudd605581db7591ceab4d6230f6593cd9_2793_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202245_hudd605581db7591ceab4d6230f6593cd9_2793_660x0_resize_box_3.png"
+        alt="image-20230519214057691"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p><em>下面的步骤中你可以使用查找工具，相当好用。</em></p>
+<p>找到<code>UUID.dat/Inventory</code>，选中复制其中所有的数据</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202246_hu9fd99c8ba8643c70d31073ef703c6927_3330_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202246_hu9fd99c8ba8643c70d31073ef703c6927_3330_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202246_hu9fd99c8ba8643c70d31073ef703c6927_3330_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202246_hu9fd99c8ba8643c70d31073ef703c6927_3330_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202246_hu9fd99c8ba8643c70d31073ef703c6927_3330_660x0_resize_box_3.png"
+        alt="image-20230519214324419"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>找到<code>level.dat/Data/Player/Inventory</code>,先删除其中所有的数据</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202247_hu1ba0a62a1616e4059f6bb333ba8b08c8_6160_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202247_hu1ba0a62a1616e4059f6bb333ba8b08c8_6160_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202247_hu1ba0a62a1616e4059f6bb333ba8b08c8_6160_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202247_hu1ba0a62a1616e4059f6bb333ba8b08c8_6160_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202247_hu1ba0a62a1616e4059f6bb333ba8b08c8_6160_660x0_resize_box_3.png"
+        alt="image-20230519214818346"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>选中Inventory后粘贴，即可将背包数据迁移。</p>
+<p>
+
+
+
+
+  
+  
+    
+  
+  
+    <figure>
+      
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202248_hu369e21369d7e8451dfb88d30246c75d8_4931_330x0_resize_box_3.png 330w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202248_hu369e21369d7e8451dfb88d30246c75d8_4931_660x0_resize_box_3.png 660w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202248_hu369e21369d7e8451dfb88d30246c75d8_4931_1024x0_resize_box_3.png 1024w,
+        /posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202248_hu369e21369d7e8451dfb88d30246c75d8_4931_1320x0_resize_box_3.png 2x"
+        src="/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/202305192202248_hu369e21369d7e8451dfb88d30246c75d8_4931_660x0_resize_box_3.png"
+        alt="image-20230519214834601"
+      />
+      
+      
+    </figure>
+  
+
+</p>
+<p>再找到<code>UUID.dat/EnderItems</code>，复制其中所有的数据，与刚刚类似，找到<code>level.dat/Data/Player/EnderItems</code>，删除其中的数据后粘贴新数据即可完成末影箱的数据迁移。</p>
+<p>再找到<code>UUID.dat/Pos</code>，复制其中所有的数据，与刚刚类似，找到<code>level.dat/Data/Player/Pos</code>，删除其中的数据后粘贴新数据即可完成人物坐标的更改。</p>
+<p>如果还想继续更改其他数据如剩余血量、当前经验值、身上的状态效果，请参照<a href="https://minecraft.fandom.com/zh/wiki/Player.dat%E6%A0%BC%E5%BC%8F#NBT%E7%BB%93%E6%9E%84"   target="_blank">
+    [WiKi]了解player.dat格式</a></p>
+<p>第二个大步骤完成了！你现在已经：</p>
+<ul>
+<li>完成了三大世界的迁移</li>
+<li>完成了背包与末影箱的物品迁移</li>
+<li>完成了其他状态迁移</li>
+</ul>
+<p><em>直接在高版本打开低版本存档时，会自动将低版本的附魔信息等数据升级</em></p>
+
+
+<h2 class="relative group">删除不需要的区块，保证新地形生成 
+    <div id="%E5%88%A0%E9%99%A4%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%8C%BA%E5%9D%97%E4%BF%9D%E8%AF%81%E6%96%B0%E5%9C%B0%E5%BD%A2%E7%94%9F%E6%88%90" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%88%A0%E9%99%A4%E4%B8%8D%E9%9C%80%E8%A6%81%E7%9A%84%E5%8C%BA%E5%9D%97%E4%BF%9D%E8%AF%81%E6%96%B0%E5%9C%B0%E5%BD%A2%E7%94%9F%E6%88%90" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>下面是最后一步了，如果你不打算在高版本打开该存档，没必要进行此步骤！</p>
+<p>此步骤为的是保证新版本地形及特性能够正常生成。</p>
+<p>请直接观看XeKr的视频教程</p>
+<p><a href="https://www.bilibili.com/video/BV1WS4y1E78S/"   target="_blank">
+    叉尅教你升存档删区块-MC存档升级+MCA Selector 删除区块简要教程</a></p>
+
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\\MC服务器与单机存档之间的数据迁移.md"
+        var oid_likes = "likes_posts\\MC服务器与单机存档之间的数据迁移.md"
+      </script>
+      
+      
+      
+      <script type="text/javascript" src="/js/page.min.b06a29d42a4ed16787978e2eee1e8c797b7698db2bc14ccee78f5c80ac566fc996190a73ad80a5e987558474b20b96fa38f7d85b405f165ff72b7b163c5ad11b.js" integrity="sha512-sGop1CpO0WeHl44u7h6MeXt2mNsrwUzO549cgKxWb8mWGQpzrYCl6YdVhHSyC5b6OPfYW0BfFl/3K3sWPFrRGw=="></script>
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/n2n_v2s%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%AE%B0/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >n2n_v2s搭建实记</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-04-25 00:00:00 &#43;0000 UTC">2023 April 25</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/firsttest/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >My first post</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-08-14 00:00:00 &#43;0000 UTC">2023 August 14</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+    <nav class="flex flex-row pb-4 text-base font-medium text-neutral-500 dark:text-neutral-400">
+      <ul class="flex flex-col list-none sm:flex-row">
+        
+        <li class="flex mb-1 ltr:text-right rtl:text-left sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+          <a class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2 flex items-center" href="/tags/"
+            title="">
+            
+            标签
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      &copy;
+      2024
+      Kumo67
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.62060bb247f4de2b6dde45903668fefb68d792f365587605177b1227c0cf43588701edaca0cb40e2c8e2789bd5ce67c1d2a215b9fb258c3496a7cd25e7cb5fdf.js" integrity="sha512-YgYLskf03itt3kWQNmj&#43;&#43;2jXkvNlWHYFF3sSJ8DPQ1iHAe2soMtA4sjieJvVzmfB0qIVufsljDSWp80l58tf3w=="></script>
+  
+  
+</footer><div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://lingyun67.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

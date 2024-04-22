@@ -39,14 +39,32 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://lingyun67.github.io/posts/teamspeak-3-%E8%AF%AD%E9%9F%B3%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8F%8A%E8%BF%81%E7%A7%BB/</loc>
+    <lastmod>2024-02-18T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://lingyun67.github.io/posts/firsttest/</loc>
     <lastmod>2023-08-14T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://lingyun67.github.io/posts/mc%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8E%E5%8D%95%E6%9C%BA%E5%AD%98%E6%A1%A3%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB/</loc>
+    <lastmod>2023-05-19T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://lingyun67.github.io/posts/n2n_v2s%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%AE%B0/</loc>
     <lastmod>2023-04-25T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://lingyun67.github.io/posts/apex_rpak%E8%A7%A3%E5%8C%85%E6%B3%A8%E9%87%8A/</loc>
+    <lastmod>2023-03-12T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
