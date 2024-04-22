@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Teamspeak on black raison detre</title>
+    <link>https://lingyun67.github.io/tags/teamspeak/</link>
+    <description>Recent content in Teamspeak on black raison detre</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2024 Kumo67</copyright>
+    <lastBuildDate>Sun, 18 Feb 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://lingyun67.github.io/tags/teamspeak/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Teamspeak 3 语音服务器的安装及迁移</title>
+      <link>https://lingyun67.github.io/posts/teamspeak-3-%E8%AF%AD%E9%9F%B3%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8F%8A%E8%BF%81%E7%A7%BB/</link>
+      <pubDate>Sun, 18 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://lingyun67.github.io/posts/teamspeak-3-%E8%AF%AD%E9%9F%B3%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%AE%89%E8%A3%85%E5%8F%8A%E8%BF%81%E7%A7%BB/</guid>
+      <description>前言及配置 # 配置：</description>
+      
+    </item>
+    
+  </channel>
+</rss>

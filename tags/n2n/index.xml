@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>N2n on black raison detre</title>
+    <link>https://lingyun67.github.io/tags/n2n/</link>
+    <description>Recent content in N2n on black raison detre</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2024 Kumo67</copyright>
+    <lastBuildDate>Tue, 25 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://lingyun67.github.io/tags/n2n/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>n2n_v2s搭建实记</title>
+      <link>https://lingyun67.github.io/posts/n2n_v2s%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%AE%B0/</link>
+      <pubDate>Tue, 25 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://lingyun67.github.io/posts/n2n_v2s%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%AE%B0/</guid>
+      <description>N2N版本选择介绍（v1\v2\v2s\v3区别\使用方法教程\免费服务器） # 由于N2N项目管理混乱，导致其版本发布存在很大的误导和散乱。</description>
+      
+    </item>
+    
+  </channel>
+</rss>
